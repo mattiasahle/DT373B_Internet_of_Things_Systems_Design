@@ -1,2 +1,1 @@
-rsa_cert.pem
-rsa_private.pem
+*.pem
