@@ -165,7 +165,7 @@ public class IotCoreCommunicator {
     }
 
     public void publishMessage(String subtopic, String message) {
-        String topic =  "/devices/" + "davsdevice2" + "/" + "davidmalmstopic";    //"/devices/" + deviceId + "/" + subtopic;  //projects/dawitmenmlproject/topics
+        String topic = "/devices/" + deviceId + "/" + subtopic;    //"/devices/" + deviceId + "/" + subtopic;  //projects/dawitmenmlproject/topics
         String payload = "{msg:\"" + message + "\"}";
         MqttMessage mqttMessage = new MqttMessage(payload.getBytes());
         mqttMessage.setQos(1);

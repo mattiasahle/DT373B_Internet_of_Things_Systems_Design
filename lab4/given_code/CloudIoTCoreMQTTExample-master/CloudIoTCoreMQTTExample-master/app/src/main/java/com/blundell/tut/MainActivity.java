@@ -21,10 +21,10 @@ public class MainActivity extends Activity {
         // Setup the communication with your Google IoT Core details
         communicator = new IotCoreCommunicator.Builder()
                 .withContext(this)
-                .withCloudRegion("us-central1") // ex: europe-west1  your region
-                .withProjectId("sensorproject")   // ex: supercoolproject23236  your project id
-                .withRegistryId("mydeviceReg") // ex: my-devices       your-registry-id
-                .withDeviceId("mydevice2") // ex: my-test-raspberry-pi        //a-device-id
+                .withCloudRegion("europe-west1") // ex: europe-west1  your region
+                .withProjectId("triple-router-335423")   // ex: supercoolproject23236  your project id
+                .withRegistryId("mattias_registry") // ex: my-devices       your-registry-id
+                .withDeviceId("mattias_phone") // ex: my-test-raspberry-pi        //a-device-id
                 .withPrivateKeyRawFileId(R.raw.rsa_private)
                 .build();
 
