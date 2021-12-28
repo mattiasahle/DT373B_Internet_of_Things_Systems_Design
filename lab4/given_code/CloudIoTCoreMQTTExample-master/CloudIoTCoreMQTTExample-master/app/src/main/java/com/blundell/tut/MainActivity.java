@@ -49,7 +49,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         @Override
         public void run() {
             communicator.connect();
-
             handler.post(sendMqttMessage);
         }
     };
@@ -62,14 +61,7 @@ public class MainActivity extends Activity implements SensorEventListener {
          */
         @Override
         public void run() {
-//            if (i == 100) {
-//                return;
-//            }
-
-            // events is the default topic for MQTT communication
             String subtopic = "events";
-            // Your message you want to send
-//            String message = "Hello World " + i++;
             String message = "acc:\t" + accX + "\t" + accY + "\t" + accZ + "\n" +
                     "mag:\t" + magX + "\t" + magY + "\t" + magZ + "\n" +
                     "gyr:\t" + gyrX + "\t" + gyrY + "\t" + gyrZ;
