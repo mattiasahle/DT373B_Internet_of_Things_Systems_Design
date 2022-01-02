@@ -74,50 +74,56 @@ def on_publish(unused_client, unused_userdata, unused_mid):
     print("on_publish")
 
 
-client.on_connect = on_connect
-client.on_publish = on_publish
+def main():
 
-client.tls_set(
-    ca_certs=root_cert_filepath
-)  # Replace this with 3rd party cert if that was used when creating registry
-client.connect("mqtt.googleapis.com", 8883)
-client.loop_start()
+    client.on_connect = on_connect
+    client.on_publish = on_publish
 
-# Could set this granularity to whatever we want based on device, monitoring needs, etc
-temperature = 0
-humidity = 0
-pressure = 0
+    client.tls_set(
+        ca_certs=root_cert_filepath
+    )  # Replace this with 3rd party cert if that was used when creating registry
+    client.connect("mqtt.googleapis.com", 8883)
+    client.loop_start()
 
-sense = SenseHat()
+    # Could set this granularity to whatever we want based on device, monitoring needs, etc
+    temperature = 0
+    humidity = 0
+    pressure = 0
 
-for i in range(1, 11):
-    cur_temp = sense.get_temperature()
-    cur_pressure = sense.get_pressure()
-    cur_humidity = sense.get_humidity()
+    sense = SenseHat()
 
-    if (
-        cur_temp == temperature
-        and cur_humidity == humidity
-        and cur_pressure == pressure
-    ):
-        time.sleep(1)
-        continue
+    for i in range(1, 11):
+        cur_temp = sense.get_temperature()
+        cur_pressure = sense.get_pressure()
+        cur_humidity = sense.get_humidity()
 
-    temperature = cur_temp
-    pressure = cur_pressure
-    humidity = cur_humidity
+        if (
+            cur_temp == temperature
+            and cur_humidity == humidity
+            and cur_pressure == pressure
+        ):
+            time.sleep(1)
+            continue
 
-    payload = (
-        '{{ "ts": {}, "temperature": {}, "pressure": {}, "humidity": {} }}'.format(
-            int(time.time()), temperature, pressure, humidity
+        temperature = cur_temp
+        pressure = cur_pressure
+        humidity = cur_humidity
+
+        payload = (
+            '{{ "ts": {}, "temperature": {}, "pressure": {}, "humidity": {} }}'.format(
+                int(time.time()), temperature, pressure, humidity
+            )
         )
-    )
 
-    # Uncomment following line when ready to publish
-    #  client.publish(_MQTT_TOPIC, payload, qos=1)
+        # Uncomment following line when ready to publish
+        #  client.publish(_MQTT_TOPIC, payload, qos=1)
 
-    print("{}\n".format(payload))
+        print("{}\n".format(payload))
 
-    time.sleep(1)
+        time.sleep(1)
 
-client.loop_stop()
+    client.loop_stop()
+
+
+if __name__ == "__main__":
+    main()
