@@ -52,15 +52,6 @@ def create_jwt():
     return jwt.encode(token, private_key, ssl_algorithm)
 
 
-_CLIENT_ID = "projects/{}/locations/{}/registries/{}/devices/{}".format(
-    project_id, gcp_location, registry_id, device_id
-)
-_MQTT_TOPIC = "/devices/{}/events".format(device_id)
-
-client = mqtt.Client(client_id=_CLIENT_ID)
-# authorization is handled purely with JWT, no user/pass, so username can be whatever
-client.username_pw_set(username="unused", password=create_jwt())
-
 
 def error_str(rc):
     return "{}: {}".format(rc, mqtt.error_string(rc))
@@ -75,50 +66,32 @@ def on_publish(unused_client, unused_userdata, unused_mid):
 
 
 def main():
+   
+    client = mqtt.Client(
+            client_id=
+            (f'projects/{project_id}/locations/{gcp_location}/registries/{registry_id}/devices/{device_id}'))
+
+    # authorization is handled purely with JWT, no user/pass, so username can be whatever
+    client.username_pw_set(username="unused", password=create_jwt())
 
     client.on_connect = on_connect
     client.on_publish = on_publish
 
-    client.tls_set(
-        ca_certs=root_cert_filepath
-    )  # Replace this with 3rd party cert if that was used when creating registry
-    client.connect("mqtt.googleapis.com", 8883)
+    client.tls_set(ca_certs=root_cert_filepath)  
+    client.connect('mqtt.googleapis.com', 8883)
     client.loop_start()
 
-    # Could set this granularity to whatever we want based on device, monitoring needs, etc
-    temperature = 0
-    humidity = 0
-    pressure = 0
-
-    sense = SenseHat()
+    sub_topic = 'events'
+    mqtt_topic = f'/devices/{device_id}/{sub_topic}'
 
     for i in range(1, 11):
-        cur_temp = sense.get_temperature()
-        cur_pressure = sense.get_pressure()
-        cur_humidity = sense.get_humidity()
 
-        if (
-            cur_temp == temperature
-            and cur_humidity == humidity
-            and cur_pressure == pressure
-        ):
-            time.sleep(1)
-            continue
-
-        temperature = cur_temp
-        pressure = cur_pressure
-        humidity = cur_humidity
-
-        payload = (
-            '{{ "ts": {}, "temperature": {}, "pressure": {}, "humidity": {} }}'.format(
-                int(time.time()), temperature, pressure, humidity
-            )
-        )
+        payload = ('{f'Time': {int(time.time())}, 'Distance': {})
 
         # Uncomment following line when ready to publish
-        #  client.publish(_MQTT_TOPIC, payload, qos=1)
+        # client.publish(mqtt_topic, payload, qos=1)
 
-        print("{}\n".format(payload))
+        print(f'Payload: {payload}')
 
         time.sleep(1)
 
