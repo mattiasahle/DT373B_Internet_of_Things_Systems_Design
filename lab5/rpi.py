@@ -20,6 +20,7 @@ import datetime
 import time
 import jwt
 import paho.mqtt.client as mqtt
+from gpiozero import DistanceSensor
 
 
 # Define some project-based variables to be used below. This should be the only
