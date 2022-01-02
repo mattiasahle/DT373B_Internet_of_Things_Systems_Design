@@ -86,7 +86,7 @@ def main():
 
     for i in range(1, 11):
 
-        payload = ('{f'Time': {int(time.time())}, 'Distance': {})
+        payload = {f'Time': {int(time.time())}, 'Distance': {}}
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, payload, qos=1)
