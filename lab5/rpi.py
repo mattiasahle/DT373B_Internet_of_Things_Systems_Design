@@ -15,31 +15,37 @@
 
 #!/usr/bin/python
 
-from sense_hat import SenseHat
 import datetime
 import time
 import jwt
 import paho.mqtt.client as mqtt
 from gpiozero import DistanceSensor
+from gpiozero import LightSensor
 
 
-# Define some project-based variables to be used below. This should be the only
-# block of variables that you need to edit in order to run this script
+# User variables
 
+# Sensors
+dist_sensor = DistanceSensor(23, 24)
+light_sensor = LightSensor(18)
+
+# Crypto
 ssl_private_key_filepath = "/home/pi/Desktop/lab5/rpi_private.pem"
 ssl_algorithm = "RS256"  # Either RS256 or ES256
 root_cert_filepath = "/home/pi/Desktop/lab5/roots.pem"
+
+# GCP
 project_id = "triple-router-335423"
 gcp_location = "europe-west1"
 registry_id = "mattias_registry"
 device_id = "mattias_rpi"
 
-# end of user-variables
-
-cur_time = datetime.datetime.utcnow()
+# end of user variables
 
 
 def create_jwt():
+    cur_time = datetime.datetime.utcnow()
+
     token = {
         "iat": cur_time,
         "exp": cur_time + datetime.timedelta(minutes=60),
@@ -51,15 +57,11 @@ def create_jwt():
 
     return jwt.encode(token, private_key, ssl_algorithm)
 
-
-
 def error_str(rc):
     return "{}: {}".format(rc, mqtt.error_string(rc))
 
-
 def on_connect(unusued_client, unused_userdata, unused_flags, rc):
     print("on_connect", error_str(rc))
-
 
 def on_publish(unused_client, unused_userdata, unused_mid):
     print("on_publish")
