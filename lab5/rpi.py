@@ -86,7 +86,7 @@ def main():
     mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
     for i in range(1, 11):
-        payload = 'Time: {}, Distance: {}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100:.1f, light_sensor.value)
+        payload = 'Time: {}, Distance: {.1f}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100, light_sensor.value)
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, payload, qos=1)
