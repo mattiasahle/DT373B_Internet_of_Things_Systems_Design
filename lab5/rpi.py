@@ -30,9 +30,9 @@ dist_sensor = DistanceSensor(23, 24)
 light_sensor = LightSensor(18)
 
 # Crypto
-ssl_private_key_filepath = "/home/pi/Desktop/lab5/rpi_private.pem"
+ssl_private_key_filepath = "/home/pi/Desktop/DT373B_Internet_of_Things_Systems_Design/lab5/private_key.pem"
 ssl_algorithm = "RS256"  # Either RS256 or ES256
-root_cert_filepath = "/home/pi/Desktop/lab5/roots.pem"
+root_cert_filepath = "/home/pi/Desktop/DT373B_Internet_of_Things_Systems_Design/lab5/roots.pem"
 
 # GCP
 project_id = "triple-router-335423"
@@ -88,7 +88,7 @@ def main():
 
     for i in range(1, 11):
 
-        payload = {f'Time': {int(time.time())}, 'Distance': {}}
+        payload = {f'Time: {int(time.time())}, Distance: {dist_sensor.distance * 100:.1f}, Light: {light_sensor.value}'}
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, payload, qos=1)
