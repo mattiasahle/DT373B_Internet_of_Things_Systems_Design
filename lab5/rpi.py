@@ -71,10 +71,10 @@ def main():
    
     client = mqtt.Client(
             client_id=
-            (f'projects/{project_id}/locations/{gcp_location}/registries/{registry_id}/devices/{device_id}'))
+            'projects/{}/locations/{}/registries/{}/devices/{}'.format(project_id, gcp_location, registry_id, device_id)
 
     # authorization is handled purely with JWT, no user/pass, so username can be whatever
-    client.username_pw_set(username="unused", password=create_jwt())
+    client.username_pw_set(username='unused', password=create_jwt())
 
     client.on_connect = on_connect
     client.on_publish = on_publish
@@ -84,16 +84,15 @@ def main():
     client.loop_start()
 
     sub_topic = 'events'
-    mqtt_topic = f'/devices/{device_id}/{sub_topic}'
+    mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
     for i in range(1, 11):
-
-        payload = {f'Time: {int(time.time())}, Distance: {dist_sensor.distance * 100:.1f}, Light: {light_sensor.value}'}
+        payload = 'Time: {}, Distance: {}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100:.1f, light_sensor.value)
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, payload, qos=1)
 
-        print(f'Payload: {payload}')
+        print('Payload: {}'.format(payload))
 
         time.sleep(1)
 
