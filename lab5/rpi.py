@@ -70,8 +70,7 @@ def on_publish(unused_client, unused_userdata, unused_mid):
 def main():
    
     client = mqtt.Client(
-            client_id=
-            'projects/{}/locations/{}/registries/{}/devices/{}'.format(project_id, gcp_location, registry_id, device_id)
+            client_id = 'projects/{}/locations/{}/registries/{}/devices/{}'.format(project_id, gcp_location, registry_id, device_id))
 
     # authorization is handled purely with JWT, no user/pass, so username can be whatever
     client.username_pw_set(username='unused', password=create_jwt())
