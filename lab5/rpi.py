@@ -26,8 +26,8 @@ from gpiozero import LightSensor
 # User variables
 
 # Sensors
-dist_sensor = DistanceSensor(23, 24)
-light_sensor = LightSensor(18)
+# dist_sensor = DistanceSensor(23, 24)
+# light_sensor = LightSensor(18)
 
 # Crypto
 ssl_private_key_filepath = "/home/pi/Desktop/DT373B_Internet_of_Things_Systems_Design/lab5/private_key.pem"
@@ -48,7 +48,7 @@ def create_jwt():
 
     token = {
         "iat": cur_time,
-        "exp": cur_time + datetime.timedelta(minutes=60),
+        "exp": cur_time + datetime.timedelta(minutes = 60),
         "aud": project_id,
     }
 
@@ -73,7 +73,7 @@ def main():
             client_id = 'projects/{}/locations/{}/registries/{}/devices/{}'.format(project_id, gcp_location, registry_id, device_id))
 
     # authorization is handled purely with JWT, no user/pass, so username can be whatever
-    client.username_pw_set(username='unused', password=create_jwt())
+    client.username_pw_set(username = 'unused', password = create_jwt())
 
     client.on_connect = on_connect
     client.on_publish = on_publish
@@ -86,12 +86,13 @@ def main():
     mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
     for i in range(1, 11):
-        payload = 'Time: {}, Distance: {.1f}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100, light_sensor.value)
+        # payload = 'Time: {}, Distance: {.1f}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100, light_sensor.value)
 
         # Uncomment following line when ready to publish
-        # client.publish(mqtt_topic, payload, qos=1)
+        client.publish(mqtt_topic, "Hello from RPi!", qos=1)
 
-        print('Payload: {}'.format(payload))
+        # print('Payload: {}'.format(payload))
+        print(mqtt_topic)
 
         time.sleep(1)
 
