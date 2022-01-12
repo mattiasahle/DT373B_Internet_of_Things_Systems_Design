@@ -96,11 +96,12 @@ def main():
         json_payload = json.dumps(payload)
 
         # Uncomment following line when ready to publish
-        # client.publish(mqtt_topic, "Hello from RPi!", qos=1)
+        client.publish(mqtt_topic, json_payload, qos=1)
 
         # print('Payload: {}'.format(payload))
         print(payload)
         print(json_payload)
+        print()
 
         time.sleep(0.1)
 
