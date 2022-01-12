@@ -26,7 +26,7 @@ from gpiozero import LightSensor
 # User variables
 
 # Sensors
-# dist_sensor = DistanceSensor(23, 24)
+dist_sensor = DistanceSensor(23, 24)
 light_sensor = LightSensor(18)
 
 # Crypto
@@ -85,14 +85,14 @@ def main():
     sub_topic = 'events'
     mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
-    for i in range(1, 11):
+    for i in range(1, 111):
         # payload = 'Time: {}, Distance: {.1f}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100, light_sensor.value)
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, "Hello from RPi!", qos=1)
 
         # print('Payload: {}'.format(payload))
-        print(light_sensor.value)
+        print(light_sensor.value, "\t", dist_sensor.distance * 100.0)
 
         time.sleep(1)
 
