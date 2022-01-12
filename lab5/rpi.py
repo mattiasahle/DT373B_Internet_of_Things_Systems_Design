@@ -19,6 +19,7 @@ import datetime
 import time
 import jwt
 import paho.mqtt.client as mqtt
+import json
 from gpiozero import DistanceSensor
 from gpiozero import LightSensor
 
@@ -86,13 +87,13 @@ def main():
     mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
     for i in range(1, 111):
-        # payload = 'Time: {}, Distance: {.1f}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100, light_sensor.value)
+        payload = 'Distance: {.1f}, Light: {}'.format(dist_sensor.distance * 100.0, light_sensor.value)
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, "Hello from RPi!", qos=1)
 
         # print('Payload: {}'.format(payload))
-        print(light_sensor.value, "\t", dist_sensor.distance * 100.0)
+        print(payload)
 
         time.sleep(1)
 
