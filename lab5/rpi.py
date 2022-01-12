@@ -87,7 +87,7 @@ def main():
     mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
 
-    for _ in range(1000):
+    for i in range(1000):
         distance = round(dist_sensor.distance * 100,1)
         light = round(light_sensor.value, 2)
         lamp_on = True if distance < 40 and light < 0.5 else False
@@ -99,8 +99,7 @@ def main():
         client.publish(mqtt_topic, json_payload, qos=1)
 
         # print('Payload: {}'.format(payload))
-        print(payload)
-        print(json_payload)
+        print(i, json_payload)
         print()
 
         time.sleep(0.1)
