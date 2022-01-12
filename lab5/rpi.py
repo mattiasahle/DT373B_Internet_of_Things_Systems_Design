@@ -86,16 +86,26 @@ def main():
     sub_topic = 'events'
     mqtt_topic = '/devices/{}/{}'.format(device_id, sub_topic)
 
-    for i in range(1, 111):
-        payload = 'Distance: {.1f}, Light: {}'.format(dist_sensor.distance * 100.0, light_sensor.value)
+    for _ in range(1000):
+	distance = round(dist_sensor.distance * 100,1)
+	light = round(light_sensor.value, 2)
+
+	if distance < 40 and light < 0.5:
+		lamp_on = True
+	else:
+		lamp_on = False
+
+        payload = {'distance': distance, 'light': light, 'lamp_on': lamp_on}
+	# json_payload = json.dumps(payload)
 
         # Uncomment following line when ready to publish
         # client.publish(mqtt_topic, "Hello from RPi!", qos=1)
 
         # print('Payload: {}'.format(payload))
         print(payload)
+	# print(json_payload)
 
-        time.sleep(1)
+        time.sleep(0.1)
 
     client.loop_stop()
 
