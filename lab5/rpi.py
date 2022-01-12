@@ -27,7 +27,7 @@ from gpiozero import LightSensor
 
 # Sensors
 # dist_sensor = DistanceSensor(23, 24)
-# light_sensor = LightSensor(18)
+light_sensor = LightSensor(18)
 
 # Crypto
 ssl_private_key_filepath = "/home/pi/Desktop/DT373B_Internet_of_Things_Systems_Design/lab5/private_key.pem"
@@ -89,10 +89,10 @@ def main():
         # payload = 'Time: {}, Distance: {.1f}, Light: {}'.format(int(time.time()), dist_sensor.distance * 100, light_sensor.value)
 
         # Uncomment following line when ready to publish
-        client.publish(mqtt_topic, "Hello from RPi!", qos=1)
+        # client.publish(mqtt_topic, "Hello from RPi!", qos=1)
 
         # print('Payload: {}'.format(payload))
-        print(mqtt_topic)
+        print(light_sensor.value)
 
         time.sleep(1)
 
