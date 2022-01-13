@@ -11,7 +11,9 @@ import android.os.HandlerThread;
 
 import com.blundell.iotcore.IotCoreCommunicator;
 
-import java.util.concurrent.TimeUnit;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -54,26 +56,38 @@ public class MainActivity extends Activity implements SensorEventListener {
     };
 
     private final Runnable sendMqttMessage = new Runnable() {
-//        private int i;
+        private int i = 0;
 
-        /**
-         * We post 100 messages as an example, 1 a second
-         */
         @Override
         public void run() {
             String subtopic = "events";
-            String message = "acc:\t" + accX + "\t" + accY + "\t" + accZ + "\n" +
-                    "mag:\t" + magX + "\t" + magY + "\t" + magZ + "\n" +
-                    "gyr:\t" + gyrX + "\t" + gyrY + "\t" + gyrZ;
-            communicator.publishMessage(subtopic, message);
+            JSONObject jsonPayload = new JSONObject();
 
-            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5));
+            try {
+                jsonPayload.put("ax", accX);
+                jsonPayload.put("ay", accY);
+                jsonPayload.put("az", accZ);
+                jsonPayload.put("mx", magX);
+                jsonPayload.put("my", magY);
+                jsonPayload.put("mz", magZ);
+                jsonPayload.put("gx", gyrX);
+                jsonPayload.put("gy", gyrY);
+                jsonPayload.put("gz", gyrZ);
+                jsonPayload.put("y", "walk");
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+
+            System.out.println("MATTIAS\t" + i++ + "\t" + jsonPayload.toString());
+            communicator.publishMessage(subtopic, jsonPayload.toString());
+
+            handler.postDelayed(this, 100); // Frequency 10Hz
         }
     };
 
 
     private void setupSamplingControls() {
-        double samplingFrequency = 0.2;
+        double samplingFrequency = 10;
         samplingPeriod = (int) (1000 / samplingFrequency);
         previousSamplingTimeAcc = System.currentTimeMillis();
         previousSamplingTimeMag = System.currentTimeMillis();
